@@ -1,6 +1,10 @@
 #Airbnb Django + Python ///////Comeback
 
+poetry init: poetry 시작
+poetry add django
+
 poetry shell: shell 활성화를 위한 명령
+django-admin startproject config .
 django-admin
 exit
 #start project
