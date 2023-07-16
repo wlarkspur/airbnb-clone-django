@@ -33,3 +33,7 @@ Application: 데이터와 데이터의 로직이 있는 섬같은 개념. models
 후에는 admin.py로 가서 생성한 model을 등록시켜야 한다.
 
 django-admin startproject config .
+
+1. Django에서는 ID 대신 PK(Primary Key)를 사용한다.
+2. on_delete = models.SET_NULL 값은 사용자가 계쩡을 삭제해도 그의 기록을 유지하고 싶을 때 사용한다. 
+    결제 내역같은 정보가 이에 해당한다.
