@@ -37,3 +37,4 @@ django-admin startproject config .
 1. Django에서는 ID 대신 PK(Primary Key)를 사용한다.
 2. on_delete = models.SET_NULL 값은 사용자가 계정을 삭제해도 그의 기록을 유지하고 싶을 때 사용한다. 
     결제 내역같은 정보가 이에 해당한다.
+3. models.ImageField()를 사용하기 위해선 poetry add Pillow 명령어로 설치해준다.
