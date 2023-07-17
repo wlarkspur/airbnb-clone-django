@@ -38,3 +38,7 @@ django-admin startproject config .
 2. on_delete = models.SET_NULL 값은 사용자가 계정을 삭제해도 그의 기록을 유지하고 싶을 때 사용한다. 
     결제 내역같은 정보가 이에 해당한다.
 3. models.ImageField()를 사용하기 위해선 poetry add Pillow 명령어로 설치해준다.
+4. python manage.py startapp common: common은 App들이 공용으로 사용할 수 있는 코드를 가진 앱.
+5. App을 설치한 후에는 config.setting에서 app을 설치해준다.
+6. blank=True는 Django Forms에서 비어있는 칸을 허용하고
+    null=True는 DB에서 null 값을 허용한다.

@@ -1,10 +1,11 @@
 from django.db import models
 from config import settings
+from common.models import CommonModel
 
 # Create your models here.
 
 
-class Room(models.Model):
+class Room(CommonModel):
 
     """Room Model Definition"""
 
@@ -51,11 +52,9 @@ class Room(models.Model):
     amenities = models.ManyToManyField(
         "rooms.Amenity",
     )
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now=True)
 
 
-class Amenity(models.Model):
+class Amenity(CommonModel):
 
     """Amenity Definition"""
 
@@ -65,4 +64,5 @@ class Amenity(models.Model):
     description = models.CharField(
         max_length=150,
         null=True,
+        blank=True,
     )
