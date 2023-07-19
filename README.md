@@ -42,3 +42,6 @@ django-admin startproject config .
 5. App을 설치한 후에는 config.setting에서 app을 설치해준다.
 6. blank=True는 Django Forms에서 비어있는 칸을 허용하고
     null=True는 DB에서 null 값을 허용한다.
+7. def __str__(self) -> str:
+        return f"{self.kind.title()}: {self.name}" 
+    정의를 통해서 models에서 정해진 kind의 title 대문자로 바꿔준다.
