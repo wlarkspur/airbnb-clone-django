@@ -45,3 +45,6 @@ django-admin startproject config .
 7. def __str__(self) -> str:
         return f"{self.kind.title()}: {self.name}" 
     정의를 통해서 models에서 정해진 kind의 title 대문자로 바꿔준다.
+8. models.OneToOneField()는 Unique 값을 의미한다. 모델간의 연결을 고유하게 만든다.
+   ex: 유저의 결제 정보를 저장할때 사용할 수 있다.
+9. 어플리케이션 에서 같은 모델 명을 가진것은 문제가 되지 않지만, 2개의 모델이 같은 모델(USER)과 연결이 되어있다면 문제가 된다.
