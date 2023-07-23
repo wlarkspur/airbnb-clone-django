@@ -49,3 +49,4 @@ django-admin startproject config .
    ex: 유저의 결제 정보를 저장할때 사용할 수 있다.
 9. 어플리케이션 에서 같은 모델 명을 가진것은 문제가 되지 않지만, 2개의 모델이 같은 모델(USER)과 연결이 되어있다면 문제가 된다.
 10. ORM (Object-relational mapping): 객체와 관계형 DB의 data를 자동으로 매핑해주는 것을 말함.
+11. python manage.py shell : InteractiveConsel 
