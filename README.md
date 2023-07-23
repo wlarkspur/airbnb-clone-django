@@ -1,4 +1,4 @@
-#Airbnb Django + Python ////////Comeback
+#Airbnb Django + Python //////// 22.novoselie
 
 poetry init: poetry 시작
 
