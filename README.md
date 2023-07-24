@@ -49,4 +49,19 @@ django-admin startproject config .
    ex: 유저의 결제 정보를 저장할때 사용할 수 있다.
 9. 어플리케이션 에서 같은 모델 명을 가진것은 문제가 되지 않지만, 2개의 모델이 같은 모델(USER)과 연결이 되어있다면 문제가 된다.
 10. ORM (Object-relational mapping): 객체와 관계형 DB의 data를 자동으로 매핑해주는 것을 말함.
-11. python manage.py shell : InteractiveConsel 
+11. python manage.py shell : InteractiveConsel
+12. model.objects.get(): 단 하나의 값만 찾는다.
+    model.objects.all(): 모든 값을 검색
+     *만약 model값이 100million개 있다면 DB가 부담이 될 것 같지만, Lazy하게 검색하므로, 직접 요청한 데이터만 가져오게 된다.
+    model.objects.filter(price__lte=1500): price가 1500이하 인값을 검색
+    model.objects.filter(name__contains="gangnam"): name에 "gangnam"이 포함된 값 검색
+    model.objects.filter(name__startswith="Apart"): name에 "Apart"로 시작하는 값 검색
+    models.objects.create(): 새로운 값 생성
+    models.objects.delete(): 값 삭제 / Manager객체에는 'delete'메서드가 없으므로, 
+    다음과 같이 삭제한다.
+    amenity_instance = Amenity.objects.get(pk=7)
+    amenity_instance.delete()
+    한줄로 삭제하려면 
+    model.objects.filter(pk=7).delete()
+    delete()를 호출하면 해당 쿼리셋에 포함된 모든 레코드가 삭제되므로 주의.
+13. QuerySet은 Lazy하기 때문에 DB를 힘들게 하지 않고 데이터를 가져올 수 있다.(ex: .exclude(),   count())
