@@ -21,6 +21,7 @@ class Experiences(CommonModel):
     host = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        related_name="experiences",
     )
     price = models.PositiveIntegerField()
     address = models.CharField(
@@ -35,6 +36,7 @@ class Experiences(CommonModel):
         null=True,
         blank=True,
         on_delete=models.SET_NULL,
+        related_name="experiences",
     )
 
     def __str__(self) -> str:

@@ -65,3 +65,14 @@ django-admin startproject config .
     model.objects.filter(pk=7).delete()
     delete()를 호출하면 해당 쿼리셋에 포함된 모든 레코드가 삭제되므로 주의.
 13. QuerySet은 Lazy하기 때문에 DB를 힘들게 하지 않고 데이터를 가져올 수 있다.(ex: .exclude(),   count())
+14. reverse는 특정 값을 가리키는 model을 찾기 위함이다.
+    models.objects.filter(owner__username="AAA")를 통해 models의 owner의 username="AAA"가 가진 값들을 검색할 수 있게된다.
+    ** __ 는 매직코드 같다.
+    ex/ Room.objects.filter(owner__username='som') username som이 가진 Room 검색.
+        Room.objects.filter(owner__username__startswith='so') 더블 __(밑줄*2)를 사용가능.
+15. review_set, room_set 를 dir(User)가 가지고 있다면, review는 user는 Forign_Key를 가리키고 있다는 의미이다. review는 user를 가리키고, room도 user를 가리킬때 dir(User)에서 review_set, room_set이 나타나게 된다.       
+16. reverse accessors(역접근자): model A가 model B에 Foreign Key,ManyToMany 등...을 가질때, 
+    자동적으로 모델 B는 'Model A_set'을 가지게 된다. 이를 커스터마이징 가능하다.
+    ex/ model A의 Foreign Key 값에 'related_name=' 을 통해 커스터마이징하면 
+    모델 B는 'Model A_set'대신 related_name값을 가지게 된다.
+    
