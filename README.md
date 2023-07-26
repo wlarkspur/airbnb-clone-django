@@ -75,4 +75,10 @@ django-admin startproject config .
     자동적으로 모델 B는 'Model A_set'을 가지게 된다. 이를 커스터마이징 가능하다.
     ex/ model A의 Foreign Key 값에 'related_name=' 을 통해 커스터마이징하면 
     모델 B는 'Model A_set'대신 related_name값을 가지게 된다.
-    
+17. 사소한 최적화 방법: 
+    1. room.reviews.all().values("rating"):
+        room 의 reviews(review_set)의 모든 값에서 rating 딕셔너리 값을 받아온다.
+    2. room.reviews.all()
+        room 의 reviews의 모든 값을 가져온다.
+    1번의 경우 약간의 최적화를 거친 코드이며, 2번은 DB가 많을 경우 작업속도를 지연시킬 수 있다.
+    extra: room.reviews 이후 부터는 manage 작업인 filter, get등 여러가지 사용가능하다.
