@@ -82,3 +82,6 @@ django-admin startproject config .
         room 의 reviews의 모든 값을 가져온다.
     1번의 경우 약간의 최적화를 거친 코드이며, 2번은 DB가 많을 경우 작업속도를 지연시킬 수 있다.
     extra: room.reviews 이후 부터는 manage 작업인 filter, get등 여러가지 사용가능하다.
+18. search_fields 값 설정법:
+        "^name" : startswith와 같다.
+        "=name" : 정확히 일치하는 값을 찾는다.
