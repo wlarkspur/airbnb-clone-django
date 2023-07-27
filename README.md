@@ -85,3 +85,17 @@ django-admin startproject config .
 18. search_fields 값 설정법:
         "^name" : startswith와 같다.
         "=name" : 정확히 일치하는 값을 찾는다.
+19. Admin action에는 3개의 매개변수가 필요하다.
+    1. 이 액션을 호출한 클래스인 model_admin
+    2. 이 액션을 호출한 유저 정보를 가지고 있는 request객체
+    3. QuerySet 뭐라고 이름짓든 상관없다.
+    관리자 페이지를 구축하거나, 동시에 여러 값들을 리셋하거나 수정할 때 액션을 사용할 수 있다.
+    엑셀에 데이터를 보내거나 owner를 바꾸거나 데이터 변경을 하고 싶을때 도움을 준다.
+    실무에서도 활용도가 높다.
+20. lookups는 튜플 list를 리턴하는 함수로
+    첫번쨰 요소는 url에 나타나고
+    두번째 요소는 유저가 클릭하게 되는 텍스트고
+    세번째는 queryset으로 필터링 된 객체, 즉 린턴해야한느 메소드다.
+21. queryset 의 self.value()가 url에 보이는 word를 주게 된다.
+    필터링 작업 없이도 리턴핫 수 있도록 해야한다.(필터 "모두, All" 옵션 선택시)
+
