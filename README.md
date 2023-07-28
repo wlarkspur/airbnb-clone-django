@@ -104,4 +104,6 @@ django-admin startproject config .
 23. request object는 요청하고 있는 브라우저의 정보, 전송하고 있는 데이터, 요청한 url 정보, ip 주소, 쿠키 등을 모두 가지고 있다.
 24. url.py 의 path의 첫 번쨰 arg는 유저가 이동할 url이고 두 번째 arg는 유저가 해당 url로 왔을때 장고가 실행할 함수이다.
 
-Divdie and Quanquer 
+Divdie and Conquer 
+
+25. 각 어플리케이션은 urls.py를 가지게 하고 config.urls.py는 모든 url을 통합하는 역할을 시킨다.
