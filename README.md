@@ -98,4 +98,10 @@ django-admin startproject config .
     세번째는 queryset으로 필터링 된 객체, 즉 린턴해야한느 메소드다.
 21. queryset 의 self.value()가 url에 보이는 word를 주게 된다.
     필터링 작업 없이도 리턴핫 수 있도록 해야한다.(필터 "모두, All" 옵션 선택시)
+22. App 내부의 views.py는 꼭 views로 이름을 해야되는건 아니다. config의 url.py에서 views 파일을 모두 import해서 사용하기 때문이다.
+    그 외 models.py, apps.py. admin.py 는 무조건 이 이름을 사용해야 한다.
+    그럼에도 views.py를 그대로 사용하는게 관례이므로 굳이 바꿔서 쓰지 않도록 한다.
+23. request object는 요청하고 있는 브라우저의 정보, 전송하고 있는 데이터, 요청한 url 정보, ip 주소, 쿠키 등을 모두 가지고 있다.
+24. url.py 의 path의 첫 번쨰 arg는 유저가 이동할 url이고 두 번째 arg는 유저가 해당 url로 왔을때 장고가 실행할 함수이다.
 
+Divdie and Quanquer 
