@@ -107,3 +107,6 @@ django-admin startproject config .
 Divdie and Conquer 
 
 25. 각 어플리케이션은 urls.py를 가지게 하고 config.urls.py는 모든 url을 통합하는 역할을 시킨다.
+26. Backend에서는 django를 쓰고 Frontend에서는 React를 쓰는게 표준이 되었다. 2023Y
+27. serializer 는 django python 객체를 JSON으로 번역하는 역할을 한다.
+    반대로 유저에게서 JSON 데이터를 받아 DB에 적용할 수 있는 Django 객체로 바꿔주기도 한다.

@@ -11,6 +11,7 @@ packages = [{include = "airbnb_clone_backend"}]
 python = "^3.11"
 django = "^4.2.3"
 pillow = "^10.0.0"
+djangorestframework = "^3.14.0"
 
 
 [build-system]
