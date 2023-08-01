@@ -112,6 +112,12 @@ Divdie and Conquer
     반대로 유저에게서 JSON 데이터를 받아 DB에 적용할 수 있는 Django 객체로 바꿔주기도 한다.
 28. DB에서 넘어오는 Django 객체를 번역하려면 
     CategorySerializer의 모델에 instance인 category를 첫 argument(인자)로 넘겨주면 된다.
+    ex: serializer = CategorySerializer(category)
     반대로 user가 보낸 데이터를 serializer로 넘기고 싶다면 아래와 같이 코드를 작성한다.
-    serializer = CategorySerializer(data=request.data)
-    
+    ex: serializer = CategorySerializer(data=request.data)
+    *seriallizer.is_valid()를 통해 데이터 값이 유효한지 확인할 수도 있다.
+        유효성 검사는사용자가 정의한 모델의 제약조건, Serializer 클래스의 유효성 검사 규칙을 기반으로 수행 된다.
+    pk = serializers.IntegerField(read_only=True) 
+    위 코드의 read_only=True는 데이터의 직렬화(serialization)할때는 필드 값을 표현하거나, 반환할 수 있지만, 역직렬화 할때는 해당 필드를 업데이트하는 것이 불가능해 진다.
+29. save() / serializer.save()를 실행하면 자동으로 create 객체를 검색한다.
+    우리가 할일은 create 객체 생성을 하는 것이다.
