@@ -110,3 +110,8 @@ Divdie and Conquer
 26. Backend에서는 django를 쓰고 Frontend에서는 React를 쓰는게 표준이 되었다. 2023Y
 27. serializer 는 django python 객체를 JSON으로 번역하는 역할을 한다.
     반대로 유저에게서 JSON 데이터를 받아 DB에 적용할 수 있는 Django 객체로 바꿔주기도 한다.
+28. DB에서 넘어오는 Django 객체를 번역하려면 
+    CategorySerializer의 모델에 instance인 category를 첫 argument(인자)로 넘겨주면 된다.
+    반대로 user가 보낸 데이터를 serializer로 넘기고 싶다면 아래와 같이 코드를 작성한다.
+    serializer = CategorySerializer(data=request.data)
+    
