@@ -121,4 +121,4 @@ Divdie and Conquer
     위 코드의 read_only=True는 데이터의 직렬화(serialization)할때는 필드 값을 표현하거나, 반환할 수 있지만, 역직렬화 할때는 해당 필드를 업데이트하는 것이 불가능해 진다.
 29. save() / serializer.save()를 실행하면 자동으로 create 객체를 검색한다.
     우리가 할일은 create 객체 생성을 하는 것이다. // Chanllenging...
-30. raise 가 실행되면 그 뒤의 코드는 실행되지 않는다.
+30. raise 가 실행되면 그 뒤의 코드는 실행되지 않는다..
