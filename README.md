@@ -119,6 +119,18 @@ Divdie and Conquer
         유효성 검사는사용자가 정의한 모델의 제약조건, Serializer 클래스의 유효성 검사 규칙을 기반으로 수행 된다.
     pk = serializers.IntegerField(read_only=True) 
     위 코드의 read_only=True는 데이터의 직렬화(serialization)할때는 필드 값을 표현하거나, 반환할 수 있지만, 역직렬화 할때는 해당 필드를 업데이트하는 것이 불가능해 진다.
+    
+    serializer = CategorySerializer(
+            category,
+            data=request.data,
+            partial=True,
+        )
+    위 코드에서 partial=True는 부분 업데이트를 허용하고, 요청에 포함된 데이터만을 업데이트하는데 사용된다.
+
 29. save() / serializer.save()를 실행하면 자동으로 create 객체를 검색한다.
     우리가 할일은 create 객체 생성을 하는 것이다. // Chanllenging...
 30. raise 가 실행되면 그 뒤의 코드는 실행되지 않는다..
+31. api 마다 version을 표기하도록하자.
+32. serializer 는 번역기로 어떤 기기종류든 핸드폰, 브라우저 누구에게나 데이터를 줄수 있는 json 모델로 번역을 해준다. Django rest_framework는 serializer를 만들수 있도록 도와준다.
+    *만약 사용자 데이터 만으로 serialzer를 만들었고 serializer.save()를 한다면 create 메소드가 실행된다.(Django는 사용자 데이터로 무언가를 생성하려는 것을 알게 된다.)
+    *만약 데이터베이스(DB)의 데이터와 사용자 데이터로 serializer를 만드려하면 데이터 업데이트하려는 것을 알고 update 메소드가 호출 된다. 
