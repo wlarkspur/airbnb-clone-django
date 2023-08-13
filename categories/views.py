@@ -4,14 +4,23 @@ from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from .models import Category
 from .serializers import CategorySerializer
+
+
+class CategoryViewSet(ModelViewSet):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+
+    def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs)
+
 
 """ all_categories 는 Queryset으로 JsonResponse를 통해 Json값이 아닌 Queryset 값을 주게된다
 그러면, 브라우저는 Queryset을 이해하지 못하기 때문에 오류가 발생한다. 대신 JSON 포맷으로 변경필요 """
 
-
-class Categories(APIView):
+""" class Categories(APIView):
     def get(self, request):
         all_categories = Category.objects.all()
         serializer = CategorySerializer(all_categories, many=True)
@@ -54,7 +63,7 @@ class CategoryDetail(APIView):
     def delete(self, request, pk):
         self.get_object(pk).delete()
         return Response(status=HTTP_204_NO_CONTENT)
-
+ """
 
 """위 코드에서 get, put, delete 메소드 네임은 다르게 적으면 작동하지 않는다."""
 

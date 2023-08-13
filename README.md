@@ -143,3 +143,16 @@ class Meta:
     fields = "__all__"
 ```
     위와같이 serializers.ModelSerializer 를 사용하여 Serializer와 Model을 자동으로 연결시켜줄 수 있다.
+34. viewsets ModelViewSet
+```python
+    class CategoryViewSet(ModelViewSet):
+    serializer_class = CategorySerializer
+    queryset = Category.objects.all()
+
+``` 
+    이 3줄의 코드로 viewSet을 대신할 수 있다.
+**Trade-offs(장단점):
+    viewSet은 코드 수를 줄여주고, 다른 일에 더 신경을 쓸 수 있도록 도와주지만
+    view처럼 직접 작성된 코드보다는 명확성이 떨어지게 된다. 
+    예를들어 커스텀 코드 작성시 viewSet안에서 한계가 생기게 된다.
+    explicit is better than implicit
