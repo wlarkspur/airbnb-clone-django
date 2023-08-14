@@ -120,12 +120,14 @@ Divdie and Conquer
     pk = serializers.IntegerField(read_only=True) 
     위 코드의 read_only=True는 데이터의 직렬화(serialization)할때는 필드 값을 표현하거나, 반환할 수 있지만, 역직렬화 할때는 해당 필드를 업데이트하는 것이 불가능해 진다.
 
-    serializer = CategorySerializer(
-            category,
-            data=request.data,
-            partial=True,
-        )
-    위 코드에서 partial=True는 부분 업데이트를 허용하고, 요청에 포함된 데이터만을 업데이트하는데 사용된다.
+```python
+serializer = CategorySerializer(
+    category,
+    data=request.data,
+    partial=True,
+    )
+```
+위 코드에서 partial=True는 부분 업데이트를 허용하고, 요청에 포함된 데이터만을 업데이트하는데 사용된다.
 
 29. save() / serializer.save()를 실행하면 자동으로 create 객체를 검색한다.
     우리가 할일은 create 객체 생성을 하는 것이다. // Chanllenging...
@@ -142,7 +144,7 @@ class Meta:
     model = Cateogry
     fields = "__all__"
 ```
-    위와같이 serializers.ModelSerializer 를 사용하여 Serializer와 Model을 자동으로 연결시켜줄 수 있다.
+위와같이 serializers.ModelSerializer 를 사용하여 Serializer와 Model을 자동으로 연결시켜줄 수 있다.
 34. viewsets ModelViewSet
 ```python
     class CategoryViewSet(ModelViewSet):
@@ -150,9 +152,12 @@ class Meta:
     queryset = Category.objects.all()
 
 ``` 
-    이 3줄의 코드로 viewSet을 대신할 수 있다.
+이 3줄의 코드로 viewSet을 대신할 수 있다.
+
 **Trade-offs(장단점):
     viewSet은 코드 수를 줄여주고, 다른 일에 더 신경을 쓸 수 있도록 도와주지만
     view처럼 직접 작성된 코드보다는 명확성이 떨어지게 된다. 
     예를들어 커스텀 코드 작성시 viewSet안에서 한계가 생기게 된다.
     explicit is better than implicit
+
+35. APIView를 사용하면 request method가 GET인지 POST인지 확인하는 조건문 코드를 쓰지 않아도 된다.
