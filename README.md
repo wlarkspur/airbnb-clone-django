@@ -161,3 +161,7 @@ class Meta:
     explicit is better than implicit
 
 35. APIView를 사용하면 request method가 GET인지 POST인지 확인하는 조건문 코드를 쓰지 않아도 된다.
+36. 
+    1. application의 urls.py는 config의 urls과 연결되어 있다.
+    2. serializers.py는 class Meta: 를 이용하여 만든 Class를 통해서 model과 serializer는 연결시켜주는데 rest_framwork.serializers import ModelSerializer 를 활용한다. 
+    3. views는 앞서 만든 model, serialzier를 활용하여 APIView를 통해 api화면을 세팅할 수있도록 해준다.
