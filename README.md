@@ -165,3 +165,29 @@ class Meta:
     1. application의 urls.py는 config의 urls과 연결되어 있다.
     2. serializers.py는 class Meta: 를 이용하여 만든 Class를 통해서 model과 serializer는 연결시켜주는데 rest_framwork.serializers import ModelSerializer 를 활용한다. 
     3. views는 앞서 만든 model, serialzier를 활용하여 APIView를 통해 api화면을 세팅할 수있도록 해준다.
+37.
+```python
+class RoomSerializer(ModelSerializer):
+    class Meta:
+        model = Room
+        fields = "__all__"
+        depth = 1
+```
+depth는 API하위 관계트리를 모두 확장시켜주는데, 커스터 마이징이 불가능하다.
+depth는 아주 간단하고 빠르게 모델의 모든 관계를 확장시키는데 유용하다.
+모든 관계를 확장시키기 때문에 불필요한 정보까지 노출될 수 있는데, 이를 위해서 model의 관계를 어떻게 커스터마이징 할 수 있을지 알아야 한다.
+
+```python
+class RoomDetailSerializer(ModelSerializer):
+    owner = TinyUserSerializer()
+    amenities = AmenitySerializer(many=True)
+
+    class Meta:
+        model = Room
+        fields = "__all__"
+
+```
+
+위 코드는 owner, amenities의 커스터마이징 코드이다. many=True설정을 해줘야만 여러개의 관계 api를 불러오게 된다.
+many=True는 List, Array가 아니고 단지 숫자만 있다면 해당 설정을 하지 않아도 된다.
+만약 사용하면 "object is not iterable"이란 오류를 뿜어내므로 참고.
