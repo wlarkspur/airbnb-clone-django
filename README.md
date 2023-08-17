@@ -147,11 +147,10 @@ class Meta:
 위와같이 serializers.ModelSerializer 를 사용하여 Serializer와 Model을 자동으로 연결시켜줄 수 있다.
 34. viewsets ModelViewSet
 ```python
-    class CategoryViewSet(ModelViewSet):
+class CategoryViewSet(ModelViewSet):
     serializer_class = CategorySerializer
     queryset = Category.objects.all()
-
-``` 
+```
 이 3줄의 코드로 viewSet을 대신할 수 있다.
 
 **Trade-offs(장단점):
@@ -165,7 +164,8 @@ class Meta:
     1. application의 urls.py는 config의 urls과 연결되어 있다.
     2. serializers.py는 class Meta: 를 이용하여 만든 Class를 통해서 model과 serializer는 연결시켜주는데 rest_framwork.serializers import ModelSerializer 를 활용한다. 
     3. views는 앞서 만든 model, serialzier를 활용하여 APIView를 통해 api화면을 세팅할 수있도록 해준다.
-37.
+37. 
+
 ```python
 class RoomSerializer(ModelSerializer):
     class Meta:
@@ -191,3 +191,18 @@ class RoomDetailSerializer(ModelSerializer):
 위 코드는 owner, amenities의 커스터마이징 코드이다. many=True설정을 해줘야만 여러개의 관계 api를 불러오게 된다.
 many=True는 List, Array가 아니고 단지 숫자만 있다면 해당 설정을 하지 않아도 된다.
 만약 사용하면 "object is not iterable"이란 오류를 뿜어내므로 참고.
+
+38. 29->recap
+user 데이터만으로 save()를 실행하면 자동으로 create method를 호출하게 된다.
+create(),save() Method의 validated_data에 추가로 데이터를 추가하고 싶다면
+save를 호출할때 호출할 데이터를 추가해주는 것이다.
+
+example:
+```python
+
+if serializer.is_valid():
+                room = serializer.save(owner=request.user)
+                serializer = RoomDetailSerializer(room)
+                return Response(serializer.data)
+
+```
