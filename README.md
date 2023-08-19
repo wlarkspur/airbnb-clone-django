@@ -206,3 +206,11 @@ if serializer.is_valid():
                 return Response(serializer.data)
 
 ```
+39. APT ManyToMany 의 경우 snippet.add(@) 의 방식으로 ["add"]를 통해 추가해줘야한다.
+40. transaction
+```python
+with transaction.atomic():
+```
+with 다음에 오는 코드 중에 error가 한개라도 발생하면 DB에 반영하지 않게 한다.
+transaction 하위코드에는 try-except를 사용하지 않도록 해야, error가 발생한 것을 인지하고 제대로 동작할 수 있다.
+ex: 비행기 티켓구매 사이트를 만든다 가정하면, 왕복 티켓을 모두 구입하게 만들어야 하는데 편도로 작성되면 DB에 반영하지 않게 하는 것을 예로 들 수 있다.
