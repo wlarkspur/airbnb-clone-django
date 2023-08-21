@@ -1,6 +1,10 @@
 from rest_framework.views import APIView
 from django.db import transaction
-from rest_framework.status import HTTP_204_NO_CONTENT, HTTP_204_NO_CONTENT
+from rest_framework.status import (
+    HTTP_204_NO_CONTENT,
+    HTTP_204_NO_CONTENT,
+    HTTP_400_BAD_REQUEST,
+)
 from rest_framework.response import Response
 from rest_framework.exceptions import (
     NotFound,
@@ -80,7 +84,13 @@ class AmenityDetail(APIView):
 class Rooms(APIView):
     def get(self, request):
         all_rooms = Room.objects.all()
-        serializer = RoomListSerializer(all_rooms, many=True)
+        serializer = RoomListSerializer(
+            all_rooms,
+            many=True,
+            context={
+                "request": request,
+            },
+        )
         return Response(serializer.data)
 
     def post(self, request):
@@ -125,7 +135,12 @@ class RoomDetail(APIView):
 
     def get(self, request, pk):
         room = self.get_objects(pk)
-        serializer = RoomDetailSerializer(room)
+        serializer = RoomDetailSerializer(
+            room,
+            context={
+                "request": request,
+            },
+        )
         return Response(serializer.data)
 
     def put(self, request, pk):
@@ -158,13 +173,17 @@ class RoomDetail(APIView):
                     else:
                         room = serializer.save()
                     amenities = request.data.get("amenities")
-                    if amenity:
+                    if amenities:
+                        room.amenities.clear()
                         for amenity_pk in amenities:
                             amenity = Amenity.objects.get(pk=amenity_pk)
+                            print(amenity)
                             room.amenities.add(amenity)
                         serializer = AmenitySerializer(room)
                         return Response(serializer.data)
-            except:
+                    else:
+                        return Response(serializer.errors)
+            except Amenity.DoesNotExist:
                 raise ParseError(f"amenity id not found")
         else:
             return Response(serializer.errors)

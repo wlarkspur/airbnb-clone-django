@@ -226,3 +226,5 @@ def get_rating(self, room):
         return room.rating()
 ```
 위와 같이 get_ 에 rating을 추가하여 models에 있는 method를 serializer로 호출하여 사용할 수 있게되면서, 필드에 새로운 변수를 추가할 수 있다.
+
+42. room하나는 수만 개의 리뷰를 가질 수 있기 때문에 해당 방을 보여줄 때, reverse accessor(역접근자) 를 포함하는 건 좋은 아이디어가 아니다. 잘못하면 DB를 다운 시킬수도 있다. 만약 리뷰가 10만개라면 단 하나의 Query로 인해 DB가 셧다운 될 수있다. 이를 방지하기 위해 pagination기능이 필요하다. 
