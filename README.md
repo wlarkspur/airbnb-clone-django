@@ -228,3 +228,25 @@ def get_rating(self, room):
 위와 같이 get_ 에 rating을 추가하여 models에 있는 method를 serializer로 호출하여 사용할 수 있게되면서, 필드에 새로운 변수를 추가할 수 있다.
 
 42. room하나는 수만 개의 리뷰를 가질 수 있기 때문에 해당 방을 보여줄 때, reverse accessor(역접근자) 를 포함하는 건 좋은 아이디어가 아니다. 잘못하면 DB를 다운 시킬수도 있다. 만약 리뷰가 10만개라면 단 하나의 Query로 인해 DB가 셧다운 될 수있다. 이를 방지하기 위해 pagination기능이 필요하다. 
+43. Pagination
+pagination을 위해서 제일 먼저 할것은 페이지를 만드는 것이다 (?)
+```python
+page = request.query_params.get("page", 1)
+```
+위 처럼 get("page", 1)의 숫자 1은 default 값으로 페이지가 없다면 1페이지를 기본값으로 가지게 된다.
+```python
+page_size = 3
+        start = (page - 1) * page_size
+        end = start + page_size
+```
+- page_size: 이는 offset에 해당하는 값으로 한 페이지에 보여지는 콘텐츠 개수이다
+- start에서 -1 즉 1페이지 -1로 0을 유도하여 index 0 부터 end 값 start + page_size를 더해줌으로써 0, 1 ,2 총 3개의 콘텐츠를 보여주게 할 수 있다.
+수식 1 * page_size 는 페이지가 1개씩 증가함에 따라 page_size의 배수로 증가한다.
+end에서는 위에서 계산된 start 에 단순히 page_size를 더함으로써 각 배수마다 보여지는 콘텐츠의 수를 영리하게 추가해주고 있다.
+```python
+serializer = AmenitySerializer(
+            room.amenities.all()[start:end],
+            many=True,
+        )
+```
+위 코드는 Django가 제공하는 페이지네이션 도움 코드로, 배열[0:3]을 제시하면 index 0~2까지의 값을 보여주도록 API를 구성해준다.
