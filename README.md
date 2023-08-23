@@ -250,3 +250,14 @@ serializer = AmenitySerializer(
         )
 ```
 위 코드는 Django가 제공하는 페이지네이션 도움 코드로, 배열[0:3]을 제시하면 index 0~2까지의 값을 보여주도록 API를 구성해준다.
+
+44. config.settings.py 에 생성하는 MEDIA_ROOT = "" 은 업로드 저장할 폴더를 물어보게 된다.
+```python
+MEDIA_ROOT = "uploads"
+```
+이렇게하면 root 경로에 uploads 폴더안으로 사진을 저장하게 된다. 
+이때 uploads앞에 / 를 사용할 필요없다. 
+MEDIA_ROOT: 파일이 실제 있는 폴더
+MEDIA_URL: 파일을 노출하는 방법
+
+**주의 이 방법은 개발단계에서만 사용해야 되며, 실제 배포에는 보안상 심각한 위험을 가지고 있으므로 파일 저장은 Cloud 서버를 이용해야 한다. 만약 그대로 배포하면 User는 아무런 파일을 우리 서버 코드옆에 바로 업로드 시킬수 있다는 의미이다. 미친짓이다.
