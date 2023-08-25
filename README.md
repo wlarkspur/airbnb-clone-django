@@ -264,3 +264,16 @@ MEDIA_URL: 파일을 노출하는 방법
 
 45. permission_classes = [IsAuthenticatedOrReadOnly]
 Model 객체 안에 위 코드를 사용하게 되면, 누구나 접근가능하게 하지만 인증된 사람만 편집권한을 가지게 된다.
+
+```python
+def put(self, request, pk, room_pk):
+        wishlist = self.get_list(pk, request.user)
+        room = self.get_room(room_pk)
+        if wishlist.rooms.filter(pk=room.pk).exists():
+            # .exists()가 있으면 TRUE,FALSE 값을 받고, 아니면 list값을 받는다.
+            wishlist.rooms.remove(room)
+        else:
+            wishlist.rooms.add(room)
+        return Response(status=HTTP_200_OK)
+```
+위 코드에서 pk, rooom_pk는 url 경로에서 전달되는 값으로 urls.py에 지정한 값과 동일해야 한다.
