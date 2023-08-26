@@ -292,6 +292,14 @@ class RoomBookings(APIView):
             raise NotFound
 
     def get(self, request, pk):
+        try:
+            page = request.query_params.get("page", 1)
+            page = int(page)
+        except ValueError:
+            raise NotFound
+        page_size = 5
+        start = (page - 1) * page_size
+        end = start + page_size
         room = self.get_object(pk)
         now = timezone.localtime(timezone.now()).date()
         bookings = Booking.objects.filter(
@@ -300,7 +308,7 @@ class RoomBookings(APIView):
             check_in__gt=now,
         )
         serializer = PublicBookingSerializer(
-            bookings,
+            bookings[start:end],
             many=True,
         )
         return Response(serializer.data)
