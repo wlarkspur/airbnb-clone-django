@@ -277,3 +277,15 @@ def put(self, request, pk, room_pk):
         return Response(status=HTTP_200_OK)
 ```
 위 코드에서 pk, rooom_pk는 url 경로에서 전달되는 값으로 urls.py에 지정한 값과 동일해야 한다.
+46. 
+```python
+from django.utils import timezone
+```
+Django timezone은 config.settings의 timezone을 알려주고 사용한다.
+*timezone.now() 는 UTC 기준 시간대를 가져온다.
+*timezone.localtime()은 서버기준 시간대를 가져온다.
+이러한 차이로 전세계 동시 접속하는 사람들간의 서로 다른시간대를 고려하면 UTC기준의 시간을 가져와 각자 로컬시간대로 아래와 같이 사용하는것이 적절하다.
+```python
+timezone.localtime(timezone.now())
+# timezone.now()에서 UTC시간을 받은 뒤 localtime으로 변경해준다.
+```

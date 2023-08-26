@@ -8,7 +8,7 @@ class Booking(CommonModel):
     """Booking Model Definition"""
 
     class BookingKindChoices(models.TextChoices):
-        ROOOM = (
+        ROOM = (
             "room",
             "Room",
         )
