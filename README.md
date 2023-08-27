@@ -289,3 +289,17 @@ Django timezone은 config.settings의 timezone을 알려주고 사용한다.
 timezone.localtime(timezone.now())
 # timezone.now()에서 UTC시간을 받은 뒤 localtime으로 변경해준다.
 ```
+47. serializer validate를 활용해서 아래와 같이 입력데이터를 검증할 수 있다.
+```python 
+    def validate_check_in(self, value):
+        now = timezone.localtime(timezone.now()).date()
+        if now > value:
+            raise serializers.ValidationError("Can't book in the past!")
+        return value
+
+    def validate_check_out(self, value):
+        now = timezone.localtime(timezone.now()).date()
+        if now >= value:
+            raise serializers.ValidationError("Can't book(check_out) in the past!")
+        return value
+```
