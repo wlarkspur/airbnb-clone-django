@@ -303,3 +303,20 @@ timezone.localtime(timezone.now())
             raise serializers.ValidationError("Can't book(check_out) in the past!")
         return value
 ```
+아래와 같이 check_in__lte or gte = data["check_in"] 을 사용해 기존 예약날짜가 신규예약 날짜와 겹치지 않는지 확인할 수 있다.
+```python
+Booking.objects.filter(
+            check_in__lte=data["check_out"],
+            check_out__gte=data["check_in"],
+        ).exists()
+```
+**validation은 serialzier 안에서 이루어지도록 하는것이 좋다.
+
+추가: 
+```python
+        if serializer.is_valid():
+            booking = serializer.save()
+            serializer = PublicBookingSerializer(booking)
+            return Response(serializer.data)
+```         
+해당 코드는 데이터 유효성 검사릍 통과후 저장하여 새로운 객체를 만든 후 다시 데이터를 serializer하여 이를 클라이언트로 응답을 보내는 과정이다.
