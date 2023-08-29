@@ -3,7 +3,7 @@ from .models import Review
 from users.models import User
 
 
-class TinyUserSerializer(serializers.ModelSerializer):
+class ForReviewTinyUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = (
@@ -14,7 +14,7 @@ class TinyUserSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    user = TinyUserSerializer(read_only=True)
+    user = ForReviewTinyUserSerializer(read_only=True)
 
     class Meta:
         model = Review

@@ -5,6 +5,16 @@ from reviews.serializers import ReviewSerializer
 from reviews.models import Review
 
 
+class TinyUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = (
+            "name",
+            "avatar",
+            "username",
+        )
+
+
 class PrivateUserSerializer(ModelSerializer):
     class Meta:
         model = User
