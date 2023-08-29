@@ -342,3 +342,4 @@ user = serializer.save()
         else:
             return Response(status=status.HTTP_400_BAD_REQUEST)
 ```
+*check_password, set_password 기능이 있다는것을 염두에 두자.
