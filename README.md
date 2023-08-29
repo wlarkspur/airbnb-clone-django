@@ -320,3 +320,25 @@ Booking.objects.filter(
             return Response(serializer.data)
 ```         
 해당 코드는 데이터 유효성 검사릍 통과후 저장하여 새로운 객체를 만든 후 다시 데이터를 serializer하여 이를 클라이언트로 응답을 보내는 과정이다.
+48. ModelSerializer는 중복 값에 대한 유효성 검사를 알아서 해준다.
+**비밀번호에 대해서는 사용자가 직접 유효성 검사를 진행해야 한다.
+```python
+user = serializer.save()
+            user.set_password(password)
+            user.save()
+```
+아래 코드는 Password를 바꾸기 위한 put 요청으로 만든 코드이다.
+```python
+ def put(self, request):
+        user = request.user
+        old_password = request.data.get("old_password")
+        new_password = request.data.get("new_password")
+        if not old_password or not new_password:
+            raise ParseError
+        if user.check_password(old_password):
+            user.set_password(new_password)
+            user.save()
+            return Response(status=status.HTTP_200_OK)
+        else:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
+```
