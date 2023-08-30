@@ -343,3 +343,11 @@ user = serializer.save()
             return Response(status=status.HTTP_400_BAD_REQUEST)
 ```
 *check_password, set_password 기능이 있다는것을 염두에 두자.
+
+49. 
+```python
+from django.contrib.auth import authenticate, login
+```
+ 1. authenticate: username, password를 주는 function
+    username, password가 맞으면 django는 user를 리턴한다.
+ 2. user를 로그인시켜주는 function으로 user, request를 보내주면 django는 브라우저가 필요한 쿠키와 token 등 중요한 정보를 준다.
