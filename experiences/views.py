@@ -8,7 +8,10 @@ from .serializers import (
     PerkSerializer,
     ExperiencesListSerializer,
     ExperiencesDetailSerializer,
+    ExperiencesPerksSerializer,
 )
+from bookings.serializers import CreateRoomBookingSerializer
+from bookings.models import Booking
 
 
 class ExperiencesList(APIView):
@@ -66,7 +69,29 @@ class ExperiencesDetail(APIView):
 
 
 class ExperiencesPerks(APIView):
-    pass
+    def get_object(self, pk):
+        try:
+            return Experiences.objects.get(pk=pk)
+        except Experiences.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        Experiences = self.get_object(pk)
+        serializer = ExperiencesPerksSerializer(Experiences)
+        return Response(serializer.data)
+
+
+class ExperiencesBookings(APIView):
+    def get_object(self, pk):
+        try:
+            return Booking.objects.get(pk=pk)
+        except Booking.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk):
+        bookings = self.get_object(pk)
+        serializer = CreateRoomBookingSerializer(bookings)
+        return Response(serializer.data)
 
 
 class Perks(APIView):

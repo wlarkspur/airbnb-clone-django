@@ -22,7 +22,6 @@ class ExperiencesListSerializer(ModelSerializer):
 
 
 class ExperiencesDetailSerializer(ModelSerializer):
-    perks = PerkSerializer(many=True)
     host = TinyUserSerializer()
 
     is_owner = serializers.SerializerMethodField()
@@ -34,3 +33,11 @@ class ExperiencesDetailSerializer(ModelSerializer):
     def get_is_owner(self, room):
         request = self.context["request"]
         return room.host == request.user
+
+
+class ExperiencesPerksSerializer(ModelSerializer):
+    perks = PerkSerializer(many=True)
+
+    class Meta:
+        model = Experiences
+        fields = ("perks",)
