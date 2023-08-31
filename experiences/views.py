@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
+from rest_framework import status
 from .models import Perk, Experiences
 from .serializers import (
     PerkSerializer,
@@ -19,6 +20,15 @@ class ExperiencesList(APIView):
         )
         return Response(serializer.data)
 
+    def post(self, request):
+        serializer = ExperiencesListSerializer(data=request.data)
+        if serializer.is_valid():
+            experience = serializer.save()
+            serializer = ExperiencesListSerializer(experience)
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
 
 class ExperiencesDetail(APIView):
     def get_object(self, pk):
@@ -29,8 +39,34 @@ class ExperiencesDetail(APIView):
 
     def get(self, request, pk):
         experiences = self.get_object(pk)
-        serializer = ExperiencesDetailSerializer(experiences)
+        serializer = ExperiencesDetailSerializer(
+            experiences, context={"request": request}
+        )
         return Response(serializer.data)
+
+    def put(self, request, pk):
+        experience = self.get_object(pk)
+        serializer = ExperiencesDetailSerializer(
+            experience, data=request.data, partial=True
+        )
+        if serializer.is_valid():
+            updated_experience = serializer.save()
+            serializer = ExperiencesDetailSerializer(
+                updated_experience, context={"request": request}
+            )
+            # serializer.py의 get_is_owner에서 request key를 받고 있었기 때문에 이곳에서도 context={"request":request}값을 추가해줘야 한다.
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
+
+    def delete(self, request, pk):
+        experience = self.get_object(pk)
+        experience.delete()
+        return Response(status=status.HTTP_200_OK)
+
+
+class ExperiencesPerks(APIView):
+    pass
 
 
 class Perks(APIView):
