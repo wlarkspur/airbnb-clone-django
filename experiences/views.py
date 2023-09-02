@@ -3,6 +3,7 @@ from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.exceptions import NotFound
 from rest_framework.response import Response
 from rest_framework import status
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from .models import Perk, Experiences
 from .serializers import (
     PerkSerializer,
@@ -10,7 +11,7 @@ from .serializers import (
     ExperiencesDetailSerializer,
     ExperiencesPerksSerializer,
 )
-from bookings.serializers import CreateRoomBookingSerializer
+from bookings.serializers import CreateRoomBookingSerializer, CreateExperienceSerializer
 from bookings.models import Booking
 
 
@@ -82,16 +83,37 @@ class ExperiencesPerks(APIView):
 
 
 class ExperiencesBookings(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
     def get_object(self, pk):
         try:
-            return Booking.objects.get(pk=pk)
-        except Booking.DoesNotExist:
+            return Experiences.objects.get(pk=pk)
+        except Experiences.DoesNotExist:
             raise NotFound
 
     def get(self, request, pk):
-        bookings = self.get_object(pk)
-        serializer = CreateRoomBookingSerializer(bookings)
+        experience = self.get_object(pk)  # experience 번호 값을 구하는 식
+        bookings = Booking.objects.filter(  # Booking DB에서 experience, kind를 검색
+            experience=experience,
+            kind=Booking.BookingKindChoices.EXPERIENCE,
+        )
+        serializer = CreateExperienceSerializer(bookings, many=True)
+        # 시리얼라이저를 이용하여 데이터를 직렬화한다.
         return Response(serializer.data)
+
+    def post(self, request, pk):
+        booking = self.get_object(pk)
+        print(booking)
+        serializer = CreateExperienceSerializer(data=request.data)
+        if serializer.is_valid():
+            booking = serializer.save(
+                user=request.user,
+                booking=booking,
+                kind=Booking.BookingKindChoices.EXPERIENCE,
+            )
+            return Response(CreateExperienceSerializer(booking).data)
+        else:
+            return Response(serializer.errors)
 
 
 class Perks(APIView):

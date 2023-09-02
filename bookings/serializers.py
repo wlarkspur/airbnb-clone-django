@@ -2,6 +2,7 @@ from django.utils import timezone
 from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from .models import Booking
+from experiences.models import Experiences
 
 
 # 일반 User를 위한 Public BookingSerializer 와 Owner를 위한 Serializer가 필요하다.
@@ -15,6 +16,7 @@ class CreateRoomBookingSerializer(ModelSerializer):
     class Meta:
         model = Booking
         fields = (
+            "pk",
             "check_in",
             "check_out",
             "guests",
@@ -39,8 +41,8 @@ class CreateRoomBookingSerializer(ModelSerializer):
             )
 
         if Booking.objects.filter(
-            check_in__lte=data["check_out"],
-            check_out__gte=data["check_in"],
+            check_in__lt=data["check_out"],
+            check_out__gt=data["check_in"],
         ).exists():
             raise serializers.ValidationError(
                 "Sorry, those dates are already booked :( "
@@ -58,3 +60,21 @@ class PublicBookingSerializer(ModelSerializer):
             "experience_time",
             "guests",
         )
+
+
+class CreateExperienceSerializer(ModelSerializer):
+    """start = serializers.TimeField()
+    end = serializers.TimeField()"""
+
+    """ guests = serializers.SerializerMethodField() """
+
+    # model을 Booking에서 해야되나 ??
+    class Meta:
+        model = Booking
+        fields = "__all__"
+
+    """ def get_guests(self, value):
+        request = self.context["request"]
+
+        return 22
+ """
