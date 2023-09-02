@@ -64,6 +64,8 @@ class PublicBookingSerializer(ModelSerializer):
 
 class CreateExperienceBookingSerializer(ModelSerializer):
     experience_time = serializers.DateField()
+    experience_start = serializers.TimeField()
+    experience_end = serializers.TimeField()
     # is_owner = serializers.SerializerMethodField()
     """ user = TinyUserSerializer() """
 
@@ -73,20 +75,64 @@ class CreateExperienceBookingSerializer(ModelSerializer):
         fields = (
             "pk",
             "experience_time",
+            "experience_start",
+            "experience_end",
             "guests",
             # "is_owner",
         )
 
     def validate_experience_time(self, value):
         now = timezone.localtime(timezone.now()).date()
+        print(now)
         if value < now:
             raise serializers.ValidationError("Can't not book in the past")
+        return value
+
+    def validate_experience_start(self, value):
+        if value < timezone.datetime.strptime("12:00:00", "%H:%M:%S").time():
+            raise serializers.ValidationError("Open time is from 12:00 :) ")
+        return value
+
+    def validate_experience_end(self, value):
+        if value > timezone.datetime.strptime("18:00:00", "%H:%M:%S").time():
+            raise serializers.ValidationError("Tour is until 18:00, Sorry! ")
+        return value
 
     def validate(self, data):
-        if Booking.objects.filter(experience_time=data["experience_time"]).exists():
+        if Booking.objects.filter(
+            experience_time=data["experience_time"],
+            experience_start__lt=data["experience_end"],
+            experience_end__gt=data["experience_start"],
+        ).exists():
             raise serializers.ValidationError(
-                "Sorry, that date is occupied :( select another date please"
+                f"Sorry, that scheldule is occupied :( select another date please"
             )
+        if "experience_start" in data or "experience_end" in data:
+            start_time = data.get(
+                "experience_start",
+                getattr(self.instance, "experience_start", None),
+            )
+            end_time = data.get(
+                "experience_end",
+                getattr(self.instance, "experience_end", None),
+            )
+            if start_time is not None and end_time is not None:
+                time_diff = end_time.hour - start_time.hour
+                if time_diff != 2:
+                    raise serializers.ValidationError(
+                        "The programms is takes 2 hours :)) 12,14,16h  "
+                    )
+                available_times = [12, 14, 16]
+                for booking in Booking.objects.filter(
+                    experience_time=data["experience_time"]
+                ):
+                    if booking.experience_start.hour in available_times:
+                        available_times.remove(booking.experience_start.hour)
+                if not start_time.hour in available_times:
+                    raise serializers.ValidationError(
+                        f"The selectd time is not available. Available start time hour: {', '.join(map(str, available_times))}"
+                    )
+        return data
 
 
 """ 
@@ -108,14 +154,53 @@ class PublicExperienceBookingSerializer(ModelSerializer):
 
 
 class ExperienceBookingDetailSerializer(ModelSerializer):
+    experience_time = serializers.DateField()
+
+    experience_start = serializers.TimeField()
+    experience_end = serializers.TimeField()
+
     class Meta:
         model = Booking
         fields = (
             "id",
             "guests",
             "experience_time",
-            "check_in",
-            "check_out",
+            "experience_start",
+            "experience_end",
             "user",
             "experience",
         )
+
+    def validate_experience_time(self, value):
+        now = timezone.localtime(timezone.now()).date()
+        if value < now:
+            raise serializers.ValidationError("Can't not book in the past")
+        return value
+
+    def validate_experience_start(self, value):
+        if value < timezone.datetime.strptime("12:00:00", "%H:%M:%S").time():
+            raise serializers.ValidationError("Open time is from 12:00 :) ")
+        return value
+
+    def validate_experience_end(self, value):
+        if value > timezone.datetime.strptime("18:00:00", "%H:%M:%S").time():
+            raise serializers.ValidationError("Tour is until 18:00, Sorry! ")
+        return value
+
+    def validate(self, data):
+        if "experience_time" in data:
+            now = timezone.localtime(timezone.now()).date()
+            if Booking.objects.filter(experience_time=data["experience_time"]).exists():
+                raise serializers.ValidationError(
+                    "Sorry, that date is occupied :( select another date please"
+                )
+        if "experience_start" in data or "experience_end" in data:
+            start_time = data.get("experience_start", self.instance.experience_start)
+            end_time = data.get("experience_end", self.instance.experience_end)
+
+            time_diff = end_time.hour - start_time.hour
+            if time_diff < 2:
+                raise serializers.ValidationError(
+                    "The minimum reservation should be 2 hours, sir."
+                )
+        return data

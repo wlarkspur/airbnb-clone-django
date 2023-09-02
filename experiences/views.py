@@ -97,16 +97,23 @@ class ExperiencesBookings(APIView):
             raise NotFound
 
     def get(self, request, pk):
+        try:
+            page = request.query_params.get("page", 1)
+            page = int(page)
+        except ValueError:
+            page = 1
+        page_size = 5
+        start = (page - 1) * page_size
+        end = start + page_size
         experience = self.get_object(pk)  # experience 번호 값을 구하는 식
         now = timezone.localtime(timezone.now()).date()
-
         bookings = Booking.objects.filter(  # Booking DB에서 experience, kind를 검색
             experience=experience,
             kind=Booking.BookingKindChoices.EXPERIENCE,
             experience_time__gt=now,
         )
         serializer = CreateExperienceBookingSerializer(
-            bookings,
+            experience.bookings.all()[start:end],
             many=True,
         )
         # 시리얼라이저를 이용하여 데이터를 직렬화한다.
@@ -114,16 +121,15 @@ class ExperiencesBookings(APIView):
 
     def post(self, request, pk):
         experience = self.get_object(pk)
-        serializer = CreateExperienceBookingSerializer(
-            data=request.data,
-        )
+        serializer = CreateExperienceBookingSerializer(data=request.data)
         if serializer.is_valid():
-            experience = serializer.save(
+            booking = serializer.save(
                 user=request.user,
                 experience=experience,
                 kind=Booking.BookingKindChoices.EXPERIENCE,
             )
-            return Response(CreateExperienceBookingSerializer(experience).data)
+            serializer = CreateExperienceBookingSerializer(booking)
+            return Response(serializer.data)
         else:
             return Response(serializer.errors)
 
@@ -142,8 +148,22 @@ class ExperiencesBookingsDetail(APIView):
         serializer = ExperienceBookingDetailSerializer(experience)
         return Response(serializer.data)
 
-    def put(self, request, pk):
-        pass
+    def put(self, request, pk, exp_pk):
+        experience = self.get_object(exp_pk)
+        serializer = ExperienceBookingDetailSerializer(
+            experience,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            updated_experience = serializer.save()
+            serializer = ExperienceBookingDetailSerializer(
+                updated_experience,
+                partial=True,
+            )
+            return Response(serializer.data)
+        else:
+            return Response(serializer.errors)
 
     def delete(self, pk):
         pass

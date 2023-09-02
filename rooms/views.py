@@ -294,7 +294,7 @@ class RoomBookings(APIView):
             page = request.query_params.get("page", 1)
             page = int(page)
         except ValueError:
-            raise NotFound
+            page = 1
         page_size = 5
         start = (page - 1) * page_size
         end = start + page_size
@@ -306,7 +306,7 @@ class RoomBookings(APIView):
             check_in__gt=now,
         )
         serializer = PublicBookingSerializer(
-            bookings[start:end],
+            room.bookings.all()[start:end],
             many=True,
         )
         return Response(serializer.data)
