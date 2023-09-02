@@ -199,8 +199,18 @@ class ExperienceBookingDetailSerializer(ModelSerializer):
             end_time = data.get("experience_end", self.instance.experience_end)
 
             time_diff = end_time.hour - start_time.hour
-            if time_diff < 2:
+            if time_diff != 2:
                 raise serializers.ValidationError(
-                    "The minimum reservation should be 2 hours, sir."
+                    "The programms is takes 2 hours :)) 12,14,16h  "
+                )
+            available_times = [12, 14, 16]
+            for booking in Booking.objects.filter(
+                experience_time=data["experience_time"]
+            ):
+                if booking.experience_start.hour in available_times:
+                    available_times.remove(booking.experience_start.hour)
+            if not start_time.hour in available_times:
+                raise serializers.ValidationError(
+                    f"The selectd time is not available. Available start time hour: {', '.join(map(str, available_times))}"
                 )
         return data
