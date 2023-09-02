@@ -1,3 +1,4 @@
+from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.status import HTTP_204_NO_CONTENT
 from rest_framework.exceptions import NotFound
@@ -11,7 +12,11 @@ from .serializers import (
     ExperiencesDetailSerializer,
     ExperiencesPerksSerializer,
 )
-from bookings.serializers import CreateRoomBookingSerializer, CreateExperienceSerializer
+from bookings.serializers import (
+    PublicExperienceBookingSerializer,
+    CreateExperienceBookingSerializer,
+    ExperienceBookingDetailSerializer,
+)
 from bookings.models import Booking
 
 
@@ -93,27 +98,55 @@ class ExperiencesBookings(APIView):
 
     def get(self, request, pk):
         experience = self.get_object(pk)  # experience 번호 값을 구하는 식
+        now = timezone.localtime(timezone.now()).date()
+
         bookings = Booking.objects.filter(  # Booking DB에서 experience, kind를 검색
             experience=experience,
             kind=Booking.BookingKindChoices.EXPERIENCE,
+            experience_time__gt=now,
         )
-        serializer = CreateExperienceSerializer(bookings, many=True)
+        serializer = CreateExperienceBookingSerializer(
+            bookings,
+            many=True,
+        )
         # 시리얼라이저를 이용하여 데이터를 직렬화한다.
         return Response(serializer.data)
 
     def post(self, request, pk):
-        booking = self.get_object(pk)
-        print(booking)
-        serializer = CreateExperienceSerializer(data=request.data)
+        experience = self.get_object(pk)
+        serializer = CreateExperienceBookingSerializer(
+            data=request.data,
+        )
         if serializer.is_valid():
-            booking = serializer.save(
+            experience = serializer.save(
                 user=request.user,
-                booking=booking,
+                experience=experience,
                 kind=Booking.BookingKindChoices.EXPERIENCE,
             )
-            return Response(CreateExperienceSerializer(booking).data)
+            return Response(CreateExperienceBookingSerializer(experience).data)
         else:
             return Response(serializer.errors)
+
+
+class ExperiencesBookingsDetail(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self, exp_pk):
+        try:
+            return Booking.objects.get(pk=exp_pk)
+        except Booking.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, pk, exp_pk):
+        experience = self.get_object(exp_pk)
+        serializer = ExperienceBookingDetailSerializer(experience)
+        return Response(serializer.data)
+
+    def put(self, request, pk):
+        pass
+
+    def delete(self, pk):
+        pass
 
 
 class Perks(APIView):

@@ -49,7 +49,7 @@ class Booking(CommonModel):
         null=True,
         blank=True,
     )
-    experience_time = models.DateTimeField(
+    experience_time = models.DateField(
         null=True,
         blank=True,
     )

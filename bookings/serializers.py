@@ -3,6 +3,7 @@ from rest_framework.serializers import ModelSerializer
 from rest_framework import serializers
 from .models import Booking
 from experiences.models import Experiences
+from users.serializers import TinyUserSerializer
 
 
 # 일반 User를 위한 Public BookingSerializer 와 Owner를 위한 Serializer가 필요하다.
@@ -57,24 +58,64 @@ class PublicBookingSerializer(ModelSerializer):
             "pk",
             "check_in",
             "check_out",
+            "guests",
+        )
+
+
+class CreateExperienceBookingSerializer(ModelSerializer):
+    experience_time = serializers.DateField()
+    # is_owner = serializers.SerializerMethodField()
+    """ user = TinyUserSerializer() """
+
+    # model을 Booking에서 해야되나 ??
+    class Meta:
+        model = Booking
+        fields = (
+            "pk",
+            "experience_time",
+            "guests",
+            # "is_owner",
+        )
+
+    def validate_experience_time(self, value):
+        now = timezone.localtime(timezone.now()).date()
+        if value < now:
+            raise serializers.ValidationError("Can't not book in the past")
+
+    def validate(self, data):
+        if Booking.objects.filter(experience_time=data["experience_time"]).exists():
+            raise serializers.ValidationError(
+                "Sorry, that date is occupied :( select another date please"
+            )
+
+
+""" 
+    def get_is_owner(self, experience):
+        request = self.context["request"]
+        return experience.user == request.user """
+
+# request값은 Django에서 제공하는 값으로 일반적으로 user값은 User모델의 인스턴스이며, 로그인한 사용자의 정보를 저장 및 관리한다. 이외에도 request.path, request.get_host(), request.session, request.COOKIES 등 여러 값을 제공한다.
+
+
+class PublicExperienceBookingSerializer(ModelSerializer):
+    class Meta:
+        model = Booking
+        fields = (
+            "pk",
             "experience_time",
             "guests",
         )
 
 
-class CreateExperienceSerializer(ModelSerializer):
-    """start = serializers.TimeField()
-    end = serializers.TimeField()"""
-
-    """ guests = serializers.SerializerMethodField() """
-
-    # model을 Booking에서 해야되나 ??
+class ExperienceBookingDetailSerializer(ModelSerializer):
     class Meta:
         model = Booking
-        fields = "__all__"
-
-    """ def get_guests(self, value):
-        request = self.context["request"]
-
-        return 22
- """
+        fields = (
+            "id",
+            "guests",
+            "experience_time",
+            "check_in",
+            "check_out",
+            "user",
+            "experience",
+        )
