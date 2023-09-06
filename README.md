@@ -351,4 +351,4 @@ from django.contrib.auth import authenticate, login
  1. authenticate: username, password를 주는 function
     username, password가 맞으면 django는 user를 리턴한다.
  2. user를 로그인시켜주는 function으로 user, request를 보내주면 django는 브라우저가 필요한 쿠키와 token 등 중요한 정보를 준다.
- 50. Code check challenge Done
+ 50. Code check challenge Done.
