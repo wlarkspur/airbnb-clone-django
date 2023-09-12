@@ -352,3 +352,23 @@ from django.contrib.auth import authenticate, login
     username, password가 맞으면 django는 user를 리턴한다.
  2. user를 로그인시켜주는 function으로 user, request를 보내주면 django는 브라우저가 필요한 쿠키와 token 등 중요한 정보를 준다.
  50. Code check challenge Done...
+
+ 51. strawberry GraphQL 라이브러리 예시
+ **Strawberry**
+ Strawberry는 GraphQL Schema를 Python 클래스로 정의하고 사용할 수 있게 해주는 라이브러리.
+ 아래 코드는 그 예시이며 간단히 설명하면
+ movies는 typing도구를 이용해 Movie List를 반환하고 뒤에 strawberry.field는 
+ resolver를 통해 field값을 어디서 가져올지 지정해주는 코드이다.
+ *mutation*의 경우
+ add_movie field는  strawberry.mutation 함수에 의해 정의되었다.
+ GraphQL Schema에 add_mutation을 추가하는 역할을 한다.
+ ```python
+ @strawberry.type
+class Query:
+    movies: typing.List[Movie] = strawberry.field(resolver=movies)
+    movie: Movie = strawberry.field(resolver=movie)
+
+@strawberry.type
+class Mutation:
+    add_movie: Movie = strawberry.mutation(resolver=add_movie)
+ ```
