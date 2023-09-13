@@ -1,5 +1,5 @@
 import strawberry
-import typing
+from rooms import schema as rooms_schema
 
 
 """
@@ -8,7 +8,7 @@ type annotaion " -> str: " 을 사용하면 strawberry가 알아서 처리해준
 
 
 @strawberry.type
-class Query:
+class Query(rooms_schema.Query):
     pass
 
 
@@ -20,5 +20,5 @@ class Mutation:
 # def 이하 return까지 graphql의 reseolver역할을 한다.
 schema = strawberry.Schema(
     query=Query,
-    mutation=Mutation,
+    # mutation=Mutation,
 )

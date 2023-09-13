@@ -372,3 +372,34 @@ class Query:
 class Mutation:
     add_movie: Movie = strawberry.mutation(resolver=add_movie)
  ```
+
+ 52. Strawberry 에서 nullable 옵션 만들기 **typing.Optional**
+ 아래코드에서 typing.Optional[] 은 RoomType을 nullable로 만들어준다.
+ ```python
+ @strawberry.type
+class Query:
+    all_rooms: typing.List[types.RoomType] = strawberry.field(
+        resolver=queries.get_all_rooms,
+    )
+    room: typing.Optional[types.RoomType] = strawberry.field(
+        resolver=queries.get_room,
+    )
+
+ ```
+ 아래코드는  Optional 을 활용하여 page를 nullable임과 동시에 Default값을 1로 표현한다.
+ ```python
+ @strawberry.field
+    def reviews(self, page: typing.Optional[int] = 1) -> typing.List["ReviewType"]:
+        page_size = settings.PAGE_SIZE
+        start = (page - 1) * page_size
+        end = start + page_size
+        return self.reviews.all()[start:end]
+ ```
+ 53. strawberry에서 isAuthenticated 구현하기
+
+ strawberry에서는 function을 호출한 사람이 누군지 알고싶다면
+ 아래 코드와 같이 *Info* 요청하지 않으면 아무것도 받을 수 없다. 
+ 
+ ```python
+ from strawberry.types import Info
+ ```
