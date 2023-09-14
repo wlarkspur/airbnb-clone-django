@@ -403,3 +403,4 @@ class Query:
  ```python
  from strawberry.types import Info
  ```
+ 54. **Postman install**

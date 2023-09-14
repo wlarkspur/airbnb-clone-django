@@ -21,7 +21,7 @@ class Query:
 
 
 @strawberry.type
-class Mutations:
+class Mutation:
     create_room: types.RoomType = strawberry.mutation(
         resolver=create_room,
         permission_classes=[OnlyLoggedIn],
