@@ -405,3 +405,13 @@ class Query:
  ```
  54. **Postman install** 
  Postman 설치 후
+
+ ```python
+ def get(self, request):
+        user = request.user
+        serializer = serializers.PrivateUserSerializer(user)
+        return Response(serializer.data)
+ ```
+ 위 코드에서 request.user 는 대체 어디서 가져온걸까 ?
+ 그것은 config.settings.py REST_FRAMEWORK 에서 제공하며
+ SessionAuthentication이라 불리는 Class이다. (쿠키랑 세션을 보고 유저를 찾음)
