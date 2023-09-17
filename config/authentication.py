@@ -1,3 +1,5 @@
+import jwt
+from django.conf import settings
 from rest_framework.authentication import BaseAuthentication
 from rest_framework.exceptions import AuthenticationFailed
 from users.models import User
@@ -5,10 +7,7 @@ from users.models import User
 
 class TrustMeAuthentication(BaseAuthentication):
     def authenticate(self, request):
-        user = User.objects.get(username="admin")
-        return (user, None)
-
-        """ username = request.headers.get("Trust-Me")
+        username = request.headers.get("Trust-Me")
         if not username:
             return None
         try:
@@ -16,4 +15,23 @@ class TrustMeAuthentication(BaseAuthentication):
             return (user, None)  # (user,None)은 문법 규칙이다.
         except User.DoesNotExist:
             raise AuthenticationFailed(f"No user {username}")
- """
+
+
+class JWTAuthentication(BaseAuthentication):
+    def authenticate(self, request):
+        token = request.headers.get("Jwt")
+        if not token:
+            return None
+        decoded = jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms="HS256",
+        )
+        pk = decoded.get("pk")
+        if not pk:
+            raise AuthenticationFailed("Invalid Token")
+        try:
+            user = User.objects.get(pk=pk)
+            return (user, None)
+        except User.DoesNotExist:
+            raise AuthenticationFailed("User not found")

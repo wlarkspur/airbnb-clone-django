@@ -415,3 +415,22 @@ class Query:
  위 코드에서 request.user 는 대체 어디서 가져온걸까 ?
  그것은 config.settings.py REST_FRAMEWORK 에서 제공하며
  SessionAuthentication이라 불리는 Class이다. (쿠키랑 세션을 보고 유저를 찾음)
+
+ 55. **authkoten**
+아래 코드와 같이 rest_framework.authtoken 코드 한줄 쓰는 것만으로도
+admin 페이지에서 새로운 모델을 볼 수 있다.
+(config > settings.py )
+ ```python
+ THIRD_PARTY_APPS = [
+    "rest_framework",
+    "rest_framework.authtoken",
+    "strawberry.django",
+]
+ ```
+ 56. **pyJWR**
+ py Json Web Token 혹은 Json Web Token
+ 시크릿키로 데이터 암호화를 하는 방식.
+
+ DRF는 여전히 SessionAuthentication 라는 쿠키,세션 인증기능이 존재하지만
+ 좀더 향상된 인증서비스를 원한다면 [django-rest-knox](https://github.com/jazzband/django-rest-knox)
+ 가 있으니 살펴보면 좋고, jwt를 쓰고 싶다면 Simple JWT를 사용할 수 있다.
