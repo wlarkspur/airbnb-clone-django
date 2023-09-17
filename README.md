@@ -431,6 +431,18 @@ admin 페이지에서 새로운 모델을 볼 수 있다.
  py Json Web Token 혹은 Json Web Token
  시크릿키로 데이터 암호화를 하는 방식.
 
+수동으로 인증을 직접해보는 방법도 있다.
+ ```python
+ REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework.authentication.SessionAuthentication",
+        "config.authentication.TrustMeAuthentication",
+        "rest_framework.authentication.TokenAuthentication",
+        "config.authentication.JWTAuthentication",
+    ]
+}
+ ```
+
  DRF는 여전히 SessionAuthentication 라는 쿠키,세션 인증기능이 존재하지만
  좀더 향상된 인증서비스를 원한다면 [django-rest-knox](https://github.com/jazzband/django-rest-knox)
  가 있으니 살펴보면 좋고, jwt를 쓰고 싶다면 Simple JWT를 사용할 수 있다.
