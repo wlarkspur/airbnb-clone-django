@@ -104,6 +104,7 @@ class TestAmenity(APITestCase):
             self.DESC,
         )
 
+    # Code Challenge !!!!
     def test_put_amenity(self):
         response = self.client.put("/api/v1/rooms/amenities/1")
 
@@ -130,6 +131,7 @@ class TestAmenity(APITestCase):
             self.DESC,
         )
 
+    # Code Challenge !!!!
     def test_delete_amenity(self):
         response = self.client.delete("/api/v1/rooms/amenities/1")
 
