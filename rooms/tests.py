@@ -1,5 +1,6 @@
 from rest_framework.test import APITestCase
 from . import models
+from users.models import User
 
 
 # TestAmenities class는 APITTestCase를 상속한다.
@@ -136,3 +137,23 @@ class TestAmenity(APITestCase):
         response = self.client.delete("/api/v1/rooms/amenities/1")
 
         self.assertEqual(response.status_code, 204, "DELETE request failed")
+
+
+class TestRooms(APITestCase):
+    def setUp(self):
+        user = User.objects.create(
+            username="test",
+        )
+        user.set_password("123")
+        user.save()
+        self.user = user
+
+    def test_create_room(self):
+        response = self.client.post("/api/v1/rooms/")
+
+        self.assertEqual(response.status_code, 403, "Not Authenticated != 403")
+        # force_login 에는 username, password가 필요없이,
+        # class에서 생성한 user를 넣으면 바로 로그인 된다.
+        self.client.force_login(
+            self.user,
+        )
