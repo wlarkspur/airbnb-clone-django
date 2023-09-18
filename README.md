@@ -446,3 +446,10 @@ admin 페이지에서 새로운 모델을 볼 수 있다.
  DRF는 여전히 SessionAuthentication 라는 쿠키,세션 인증기능이 존재하지만
  좀더 향상된 인증서비스를 원한다면 [django-rest-knox](https://github.com/jazzband/django-rest-knox)
  가 있으니 살펴보면 좋고, jwt를 쓰고 싶다면 Simple JWT를 사용할 수 있다.
+
+ 57. **API TESTING**
+
+ ```python
+ self.client
+ ```
+ self.client는 API로 get / post / put / delete request를 보낼 수 있게 해준다.
