@@ -453,3 +453,4 @@ admin 페이지에서 새로운 모델을 볼 수 있다.
  self.client
  ```
  self.client는 API로 get / post / put / delete request를 보낼 수 있게 해준다.
+ 58. **FRONT-END PART**
