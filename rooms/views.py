@@ -1,3 +1,4 @@
+import time
 from django.conf import settings
 from django.db import transaction
 from django.utils import timezone
@@ -137,6 +138,7 @@ class RoomDetail(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
 
     def get_objects(self, pk):
+        """time.sleep(1)"""
         try:
             return Room.objects.get(pk=pk)
         except Room.DoesNotExist:
