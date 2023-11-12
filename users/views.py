@@ -216,3 +216,48 @@ class KakaoLogIn(APIView):
                 return Response(status=status.HTTP_200_OK)
         except Exception:
             return Response(status=status.HTTP_400_BAD_REQUEST)
+
+
+class SignUp(APIView):
+    def post(self, request):
+        try:
+            # 전달된 데이터 가져오기
+            name = request.data.get("name")
+            email = request.data.get("email")
+            username = request.data.get("username")
+            password = request.data.get("password")
+
+            # 필수 필드가 비어있는지 확인
+            if not name or not email or not username or not password:
+                return Response(
+                    {"error": "모든 필드 입력바랍니다.🐍"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            # 이미 존재하는 사용자인지 확인
+            if User.objects.filter(username=username).exists():
+                return Response(
+                    {"error": "이미 존재하는 ID 에요 🥲"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            if User.objects.filter(email=email).exists():
+                return Response(
+                    {"error": "사용중인 Email 주소입니다 🥲"},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            # 신규 등록
+            user = User.objects.create(
+                name=name,
+                email=email,
+                username=username,
+            )
+            user.set_password(password)
+            user.save()
+
+            return Response(
+                {"Success": "회원가입이 완료 되었습니다."},
+                status=status.HTTP_200_OK,
+            )
+
+        except Exception:
+            return Response(status=status.HTTP_400_BAD_REQUEST)
