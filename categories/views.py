@@ -11,10 +11,12 @@ from .serializers import CategorySerializer
 
 class CategoryViewSet(ModelViewSet):
     serializer_class = CategorySerializer
-    queryset = Category.objects.all()
+    queryset = Category.objects.filter(
+        kind=Category.CategoryKindChoices.ROOMS,
+    )
 
-    def destroy(self, request, *args, **kwargs):
-        return super().destroy(request, *args, **kwargs)
+    """ def destroy(self, request, *args, **kwargs):
+        return super().destroy(request, *args, **kwargs) """
 
 
 """ all_categories 는 Queryset으로 JsonResponse를 통해 Json값이 아닌 Queryset 값을 주게된다
