@@ -169,7 +169,7 @@ class RoomDetail(APIView):
         # amenities, category 는 read_only 이므로 데이터를 가져와야 한다.
         if serializer.is_valid():
             category_pk = request.data.get("category")
-            if not category_pk:
+            if not request.data.get("category"):
                 raise ParseError("category is required")
             try:
                 category = Category.objects.get(pk=category_pk)
