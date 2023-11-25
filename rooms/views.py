@@ -308,17 +308,35 @@ class RoomPhotos(APIView):
         else:
             return Response(serializer.errors)
 
-    def put(self, request, pk):
-        room = self.get_object(pk)
+
+class RoomPhotosUpdate(APIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+
+    def get_object(self, roomPk):
+        try:
+            return Room.objects.get(pk=roomPk)
+        except Room.DoesNotExist:
+            raise NotFound
+
+    def get(self, request, roomPk, photo_pk):
+        room = self.get_object(roomPk=roomPk)
         if request.user != room.owner:
             raise PermissionDenied
-
-        photo_pk = request.data.get("pk")
-        print(photo_pk, request.data)
-        photo = get_object_or_404(Photo, pk=photo_pk, room=room)
-        print("aaa=>", photo)
+        all_photos = Photo.objects.all()
         serializer = PhotoSerializer(
-            photo,
+            all_photos,
+            many=True,
+        )
+        return Response(serializer.data)
+
+    def put(self, request, roomPk, photo_pk):
+        room = self.get_object(roomPk)
+        if request.user != room.owner:
+            raise PermissionDenied
+        print(room, "photo_pk", photo_pk)
+
+        serializer = PhotoSerializer(
+            room.photos.get(pk=photo_pk),
             data=request.data,
             partial=True,
         )

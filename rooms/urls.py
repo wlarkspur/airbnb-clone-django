@@ -8,8 +8,8 @@ urlpatterns = [
     path("<int:pk>/amenities", views.RoomAmenities.as_view()),
     path("<int:pk>/photos", views.RoomPhotos.as_view(), name="room-photos"),
     path(
-        "<int:pk>/photos/<int:photo_pk>",
-        views.RoomPhotos.as_view(),
+        "<int:roomPk>/photos-update/<int:photo_pk>",
+        views.RoomPhotosUpdate.as_view(),
         name="room-photo-detail",
     ),
     path("<int:pk>/bookings", views.RoomBookings.as_view()),
