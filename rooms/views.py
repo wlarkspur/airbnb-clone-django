@@ -1,6 +1,7 @@
 import time
 from django.conf import settings
 from django.db import transaction
+from django.http import Http404
 from django.utils import timezone
 from rest_framework.views import APIView
 from rest_framework.status import (
@@ -14,7 +15,10 @@ from rest_framework.exceptions import (
     ParseError,
     PermissionDenied,
 )
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
+
+from medias.models import Photo
 from .models import Amenity, Room
 from categories.models import Category
 from .serializers import AmenitySerializer, RoomListSerializer, RoomDetailSerializer
@@ -277,6 +281,17 @@ class RoomPhotos(APIView):
         except Room.DoesNotExist:
             raise NotFound
 
+    def get(self, request, pk):
+        room = self.get_object(pk=pk)
+        if request.user != room.owner:
+            raise PermissionDenied
+        all_photos = Photo.objects.all()
+        serializer = PhotoSerializer(
+            all_photos,
+            many=True,
+        )
+        return Response(serializer.data)
+
     def post(self, request, pk):
         room = self.get_object(pk)
         if request.user != room.owner:
@@ -292,6 +307,26 @@ class RoomPhotos(APIView):
             return Response(serializer.data)
         else:
             return Response(serializer.errors)
+
+    def put(self, request, pk):
+        room = self.get_object(pk)
+        if request.user != room.owner:
+            raise PermissionDenied
+
+        photo_pk = request.data.get("pk")
+        print(photo_pk, request.data)
+        photo = get_object_or_404(Photo, pk=photo_pk, room=room)
+        print("aaa=>", photo)
+        serializer = PhotoSerializer(
+            photo,
+            data=request.data,
+            partial=True,
+        )
+        if serializer.is_valid():
+            updated_photo = serializer.save()
+            return Response(PhotoSerializer(updated_photo).data)
+        else:
+            return Response(serializer.errors, status=HTTP_400_BAD_REQUEST)
 
 
 class RoomBookings(APIView):

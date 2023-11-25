@@ -4,7 +4,7 @@ from .models import Photo, Video
 
 @admin.register(Photo)
 class PhotoAdmin(admin.ModelAdmin):
-    pass
+    list_display = ("file", "room", "description", "created_at")
 
 
 @admin.register(Video)
