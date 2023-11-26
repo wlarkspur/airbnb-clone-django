@@ -164,7 +164,13 @@ REST_FRAMEWORK = {
         "config.authentication.TrustMeAuthentication",
         "rest_framework.authentication.TokenAuthentication",
         "config.authentication.JWTAuthentication",
-    ]
+        # "rest_framework.authentication.BasicAuthentication",
+        # "rest_framework.permissions.IsAuthenticatedOrReadOnly",
+    ],
+    # "DEFAULT_PERMISSION_CLASSES": [
+    # "rest_framework.permissions.IsAuthenticated",
+    # 다른 권한 클래스 추가 가능
+    # ],
 }
 
 CORS_ALLOWED_ORIGINS = ["http://127.0.0.1:3000"]

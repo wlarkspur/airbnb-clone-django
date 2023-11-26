@@ -6,7 +6,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from rest_framework.exceptions import ParseError
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import (
+    IsAuthenticated,
+    IsAuthenticatedOrReadOnly,
+    AllowAny,
+)
 from rest_framework.exceptions import NotFound
 from . import serializers
 from .models import User
@@ -15,6 +19,7 @@ from .models import User
 class Me(APIView):
     permission_classes = [IsAuthenticated]
 
+    # IsAuthenticated 기존 permission_classes 코드
     def get(self, request):
         user = request.user
         serializer = serializers.PrivateUserSerializer(user)

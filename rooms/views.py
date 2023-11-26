@@ -16,7 +16,7 @@ from rest_framework.exceptions import (
     PermissionDenied,
 )
 from rest_framework.generics import get_object_or_404
-from rest_framework.permissions import IsAuthenticatedOrReadOnly
+from rest_framework.permissions import IsAuthenticatedOrReadOnly, AllowAny
 
 from medias.models import Photo
 from .models import Amenity, Room
@@ -143,6 +143,7 @@ class Rooms(APIView):
 
 class RoomDetail(APIView):
     permission_classes = [IsAuthenticatedOrReadOnly]
+    # AllowAny, IsAuthenticatedOrReadOnly
 
     def get_objects(self, pk):
         """time.sleep(1)"""

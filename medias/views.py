@@ -6,6 +6,7 @@ from rest_framework.status import HTTP_200_OK
 from rest_framework.response import Response
 from rest_framework.exceptions import NotFound, PermissionDenied
 from .models import Photo
+from .serializers import PhotoSerializer
 
 
 # Create your views here.
@@ -17,6 +18,11 @@ class PhotoDetail(APIView):
             return Photo.objects.get(pk=pk)
         except Photo.DoesNotExist:
             raise NotFound
+
+    def get(self, request, pk):
+        all_photo = Photo.objects.all()
+        serializer = PhotoSerializer(all_photo, many=True)
+        return Response(serializer.data)
 
     def delete(self, request, pk):
         photo = self.get_object(pk)
