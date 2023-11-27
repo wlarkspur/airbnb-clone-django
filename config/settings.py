@@ -156,7 +156,7 @@ AUTH_USER_MODEL = "users.User"
 MEDIA_ROOT = "uploads"
 MEDIA_URL = "user-uploads/"  # 단순히 url을 위함.
 
-PAGE_SIZE = 3
+PAGE_SIZE = 5
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
