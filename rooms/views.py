@@ -1,4 +1,4 @@
-import time
+from django.utils.dateparse import parse_date
 from django.conf import settings
 from django.db import transaction
 from django.http import Http404
@@ -360,22 +360,25 @@ class RoomBookings(APIView):
 
     def get(self, request, pk):
         try:
-            page = request.query_params.get("page", 1)
-            page = int(page)
+            page = int(request.query_params.get("page", 1))
         except ValueError:
             page = 1
+
         page_size = 5
         start = (page - 1) * page_size
         end = start + page_size
+
         room = self.get_object(pk)
         now = timezone.localtime(timezone.now()).date()
+
         bookings = Booking.objects.filter(
             room=room,
             kind=Booking.BookingKindChoices.ROOM,
             check_in__gt=now,
         )
+
         serializer = PublicBookingSerializer(
-            room.bookings.all()[start:end],
+            bookings[start:end],
             many=True,
         )
         return Response(serializer.data)
@@ -409,8 +412,8 @@ class RoomBookingCheck(APIView):
 
     def get(self, request, pk):
         room = self.get_object(pk)
-        check_out = request.query_params.get("check_out")
-        check_in = request.query_params.get("check_in")
+        check_in = parse_date(request.query_params.get("check_in"))
+        check_out = parse_date(request.query_params.get("check_out"))
         # query_params 는 주소 ?abc=abc 같은 식으로 주소를 나타낸다
         exists = Booking.objects.filter(
             room=room,
