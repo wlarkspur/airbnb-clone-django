@@ -5,7 +5,7 @@ description = ""
 authors = ["wlarkspur <newacon@naver.com>"]
 license = "MIT"
 readme = "README.md"
-packages = [{include = "airbnb_clone_backend"}]
+#packages = [{include = "airbnb_clone_backend"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
@@ -21,6 +21,8 @@ dj-database-url = "^2.1.0"
 psycopg2-binary = "^2.9.9"
 gunicorn = "^21.2.0"
 
+[tool.petry]
+poetry = "^1.2.1"
 
 [build-system]
 requires = ["poetry-core"]
