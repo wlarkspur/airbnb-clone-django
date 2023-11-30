@@ -199,8 +199,8 @@ if DEBUG:
     CSRF_TRUSTED_ORIGINS = ["http://127.0.0.1:3000"]
 
 else:
-    CORS_ALLOWED_ORIGINS = ["https://www.coolbnb.xyz"]
-    CSRF_TRUSTED_ORIGINS = ["https://www.coolbnb.xyz"]
+    CORS_ALLOWED_ORIGINS = ["https://coolbnb.xyz"]
+    CSRF_TRUSTED_ORIGINS = ["https://coolbnb.xyz"]
 
 
 CORS_ALLOW_CREDENTIALS = True
