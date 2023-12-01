@@ -78,8 +78,8 @@ SYSTEM_APPS = [
 INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
-    "django.middleware.security.SecurityMiddleware",
     "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -206,7 +206,11 @@ if DEBUG:
     ]
 
 else:
-    CORS_ALLOWED_ORIGINS = ["https://coolbnb.xyz"]
+    CORS_ALLOWED_ORIGINS = [
+        "https://coolbnb.xyz",
+        "https://www.coolbnb.xyz",
+        "https://airbnb-frontend-6t7z.onrender.com/",
+    ]
     CSRF_TRUSTED_ORIGINS = ["https://coolbnb.xyz"]
 
 
