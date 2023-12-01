@@ -78,11 +78,11 @@ SYSTEM_APPS = [
 INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
+    "django.middleware.common.CommonMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -215,16 +215,6 @@ else:
 
 
 CORS_ALLOW_CREDENTIALS = True
-CORS_ALLOW_HEADERS = [
-    "access-control-allow-credentials",
-    "access-control-allow-headers",
-    "access-control-allow-methods",
-    "access-control-allow-origin",
-    "access-control-expose-headers",
-    "access-control-max-age",
-    "authorization",
-    "content-type",
-]
 
 GH_SECRET = env("GH_SECRET")
 
