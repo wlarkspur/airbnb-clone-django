@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
-import os
 from pathlib import Path
+import os
 import environ
 import sentry_sdk
 import dj_database_url
@@ -78,11 +78,11 @@ SYSTEM_APPS = [
 INSTALLED_APPS = SYSTEM_APPS + THIRD_PARTY_APPS + CUSTOM_APPS
 
 MIDDLEWARE = [
-    "django.middleware.common.CommonMiddleware",
-    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "whitenoise.middleware.WhiteNoiseMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
+    "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
@@ -198,13 +198,11 @@ REST_FRAMEWORK = {
 if DEBUG:
     CORS_ALLOWED_ORIGINS = [
         "http://127.0.0.1:3000",
-        "http://localhost:3000",
     ]
     CSRF_TRUSTED_ORIGINS = [
         "http://127.0.0.1:3000",
-        "http://localhost:3000",
     ]
-    CORS_ALLOW_CREDENTIALS = True
+
 else:
     CORS_ALLOWED_ORIGINS = [
         "https://coolbnb.xyz",
@@ -212,11 +210,15 @@ else:
         "https://airbnb-frontend-6t7z.onrender.com",
     ]
     CSRF_TRUSTED_ORIGINS = ["https://coolbnb.xyz"]
-    CORS_ALLOW_CREDENTIALS = True
+
+
+""" CORS_ORIGIN_WHITELIST = [
+    "http://127.0.0.1:3000",
+    "https://coolbnb.xyz",
+] """
 
 
 CORS_ALLOW_CREDENTIALS = True
-
 GH_SECRET = env("GH_SECRET")
 
 CF_ID = env("CF_ID")
