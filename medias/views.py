@@ -45,4 +45,9 @@ class GetUpLoadURL(APIView):
         )
         one_time_url = one_time_url.json()
         result = one_time_url.get("result")
-        return Response({"id": result.get("id"), "uploadURL": result.get("uploadURL")})
+        if result is not None:
+            return Response(
+                {"id": result.get("id"), "uploadURL": result.get("uploadURL")}
+            )
+        else:
+            return {"id": None, "uploadURL": None}
