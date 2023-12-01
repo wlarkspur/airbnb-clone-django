@@ -204,7 +204,7 @@ if DEBUG:
         "http://127.0.0.1:3000",
         "http://localhost:3000",
     ]
-
+    CORS_ALLOW_CREDENTIALS = True
 else:
     CORS_ALLOWED_ORIGINS = [
         "https://coolbnb.xyz",
@@ -212,6 +212,7 @@ else:
         "https://airbnb-frontend-6t7z.onrender.com",
     ]
     CSRF_TRUSTED_ORIGINS = ["https://coolbnb.xyz"]
+    CORS_ALLOW_CREDENTIALS = True
 
 
 CORS_ALLOW_CREDENTIALS = True
