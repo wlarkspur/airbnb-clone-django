@@ -209,7 +209,7 @@ else:
     CORS_ALLOWED_ORIGINS = [
         "https://coolbnb.xyz",
         "https://www.coolbnb.xyz",
-        "https://airbnb-frontend-6t7z.onrender.com/",
+        "https://airbnb-frontend-6t7z.onrender.com",
     ]
     CSRF_TRUSTED_ORIGINS = ["https://coolbnb.xyz"]
 
