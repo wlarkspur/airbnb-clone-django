@@ -23,7 +23,12 @@ class Me(APIView):
     def get(self, request):
         user = request.user
         serializer = serializers.PrivateUserSerializer(user)
-        return Response(serializer.data)
+        response = Response(serializer.data)
+
+        # 쿠키를 다른 도메인 간 요청에서 허용하도록 설정
+        response["Access-Control-Allow-Credentials"] = "true"
+
+        return response
 
     def put(self, request):
         user = request.user
@@ -35,7 +40,11 @@ class Me(APIView):
         if serializer.is_valid():
             user = serializer.save()
             serializer = serializers.PrivateUserSerializer(user)
-            return Response(serializer.data)
+            response = Response(serializer.data)
+
+            # 쿠키를 다른 도메인 간 요청에서 허용하도록 설정
+            response["Access-Control-Allow-Credentials"] = "true"
+            return response
         else:
             return Response(serializer.errors)
 
